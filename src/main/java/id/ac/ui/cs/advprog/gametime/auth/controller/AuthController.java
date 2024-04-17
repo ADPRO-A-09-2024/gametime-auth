@@ -36,12 +36,12 @@ public class AuthController {
     // }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto){
+    public String login(){
         return "Hello world";
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterDto registerDto) {
+    public String register() {
         return "Hello world";
         }
 
