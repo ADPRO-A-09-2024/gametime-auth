@@ -4,8 +4,8 @@ import id.ac.ui.cs.advprog.gametime.auth.model.Builder.UserBuilder;
 import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+// import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -22,10 +22,10 @@ public class UserRepository {
     private UserBuilder userBuilder;
 
     public UserRepository(){
-        PasswordEncoder pe = new BCryptPasswordEncoder();
+        // PasswordEncoder pe = new BCryptPasswordEncoder();
         UserEntity newUser = new UserEntity();
         newUser.setUsername("user");
-        newUser.setPassword(pe.encode("pass"));
+        // newUser.setPassword(pe.encode("pass"));
         newUser.setType("SELLER");
         userData.add(newUser);
         System.out.println("zczc "+userData.getFirst());
