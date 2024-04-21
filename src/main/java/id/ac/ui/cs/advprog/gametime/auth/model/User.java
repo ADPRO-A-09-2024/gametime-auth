@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Getter
     @Setter
-    private int balance = 0;
+    private int balance;
 
     public static UserBuilder builder() {
         return new UserBuilder();
