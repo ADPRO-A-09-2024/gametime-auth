@@ -1,9 +1,9 @@
 package id.ac.ui.cs.advprog.gametime.auth.controller;
 
 import id.ac.ui.cs.advprog.gametime.auth.model.Builder.UserBuilder;
+import id.ac.ui.cs.advprog.gametime.auth.dto.LoginDto;
+import id.ac.ui.cs.advprog.gametime.auth.dto.RegisterDto;
 import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
-import id.ac.ui.cs.advprog.gametime.auth.model.dto.LoginDto;
-import id.ac.ui.cs.advprog.gametime.auth.model.dto.RegisterDto;
 import id.ac.ui.cs.advprog.gametime.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

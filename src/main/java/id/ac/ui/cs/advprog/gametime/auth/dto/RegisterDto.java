@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.gametime.auth.model.dto;
+package id.ac.ui.cs.advprog.gametime.auth.dto;
 
 import lombok.Data;
 
