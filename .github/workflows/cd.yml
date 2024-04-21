@@ -46,4 +46,5 @@ jobs:
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --set-env-vars=PG_HOST=${{ secrets.JDBC_DATABASE_URL }} \
           --set-env-vars=PG_USER=${{ secrets.JDBC_DATABASE_USERNAME }} \
-          --set-env-vars=PG_PASS=${{ secrets.JDBC_DATABASE_PASSWORD }}
+          --set-env-vars=PG_PASS=${{ secrets.JDBC_DATABASE_PASSWORD }} \
+          --set-env-vars=JWT_SECRET=${{ secrets.JWT_SECRET }}
