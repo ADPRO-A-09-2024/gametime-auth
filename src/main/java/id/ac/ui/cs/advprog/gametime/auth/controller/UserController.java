@@ -1,14 +1,8 @@
 package id.ac.ui.cs.advprog.gametime.auth.controller;
 
-import id.ac.ui.cs.advprog.gametime.auth.model.Enum.UserType;
 import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
-import id.ac.ui.cs.advprog.gametime.auth.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
