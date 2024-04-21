@@ -31,7 +31,12 @@ public class User {
     @Column(nullable = false)
     @Getter
     @Setter
-    private String role;
+    private String type;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private Integer balance;
 
     public static UserBuilder builder() {
         return new UserBuilder();

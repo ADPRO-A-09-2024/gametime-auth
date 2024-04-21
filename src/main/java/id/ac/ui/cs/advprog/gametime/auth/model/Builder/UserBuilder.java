@@ -9,7 +9,8 @@ public class UserBuilder {
     private String username;
     private String email;
     private String password;
-    private String role;
+    private String type;
+    private Integer balance;
 
     public UserBuilder username(String username) {
         if (username == null || username.isEmpty()) {
@@ -38,14 +39,19 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder role(String role) {
-        if (role == null || role.isEmpty()) {
+    public UserBuilder type(String type) {
+        if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Role cannot be empty");
         }
-        if (!UserType.contains(role)) {
+        if (!UserType.contains(type)) {
             throw new IllegalArgumentException("Invalid role");
         }
-        this.role = role;
+        this.type = type;
+        return this;
+    }
+
+    public UserBuilder balance(Integer balance){
+        this.balance = balance;
         return this;
     }
 
@@ -53,8 +59,9 @@ public class UserBuilder {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
-        user.setRole(role);
         user.setPassword(password);
+        user.setType(type);
+        user.setBalance(null);
         return user;
     }
 }
