@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.gametime.auth.model.Builder;
 
-
 import id.ac.ui.cs.advprog.gametime.auth.model.Enum.UserType;
 import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
 import org.springframework.stereotype.Component;
