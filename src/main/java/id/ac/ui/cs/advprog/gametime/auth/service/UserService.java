@@ -1,13 +1,25 @@
 package id.ac.ui.cs.advprog.gametime.auth.service;
 
-import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
+import id.ac.ui.cs.advprog.gametime.auth.model.User;
+import id.ac.ui.cs.advprog.gametime.auth.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface UserService{
-    public UserEntity create(UserEntity user);
-    public List<UserEntity> findAll();
-    UserEntity findByUsername(String username);
-    public void update(String userId, UserEntity user);
-    public void deleteUserById(String userId);
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public List<User> allUsers() {
+        List<User> users = new ArrayList<>();
+
+        userRepository.findAll().forEach(users::add);
+
+        return users;
+    }
 }

@@ -1,70 +1,12 @@
 package id.ac.ui.cs.advprog.gametime.auth.repository;
 
-import id.ac.ui.cs.advprog.gametime.auth.model.Builder.UserBuilder;
-import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import id.ac.ui.cs.advprog.gametime.auth.model.User;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Optional;
 
-@Component
 @Repository
-public class UserRepository {
-    private final List<UserEntity> userData = new ArrayList<>();
-
-    @Autowired
-    private UserBuilder userBuilder;
-
-    public UserRepository(){
-        // PasswordEncoder pe = new BCryptPasswordEncoder();
-        UserEntity newUser = new UserEntity();
-        newUser.setUsername("user");
-        // newUser.setPassword(pe.encode("pass"));
-        newUser.setType("SELLER");
-        userData.add(newUser);
-        System.out.println("zczc "+userData.getFirst());
-    }
-
-    public UserEntity createUser(UserEntity newUser){
-        userData.add(newUser);
-        return newUser;
-    }
-    public Iterator<UserEntity> findAll(){
-        return userData.iterator();
-    }
-    public UserEntity findByUsername(String username){
-        for (UserEntity User: userData){
-            if (User.getUsername().equals(username)){
-                return User;
-            }
-        }
-        return null;
-    }
-
-    public UserEntity update(String username, UserEntity updatedUser){
-        for (int i=0; i<userData.size(); i++){
-            UserEntity user = userData.get(i);
-            if(user.getUsername().equals(username)){
-                UserEntity newUser = userBuilder.reset()
-                        .setCurrent(updatedUser)
-                        .addUsername(username)
-                        .addPassword(user.getPassword())
-                        .build();
-                userData.remove(i);
-                userData.add(i,newUser);
-                return newUser;
-            }
-        }
-        return null;
-    }
-
-    public void delete(String username){
-        userData.removeIf(User -> User.getUsername().equals(username));
-    }
+public interface UserRepository extends CrudRepository<User, Integer> {
+    Optional<User> findByEmail(String email);
 }

@@ -16,9 +16,8 @@ RUN addgroup -g ${USER_GID} ${USER_NAME} \
 
 USER ${USER_NAME}
 WORKDIR /opt/auth
+EXPOSE 8080
 COPY --from=builder --chown=${USER_UID}:${USER_GID} /src/auth/build/libs/*.jar app.jar
-
-EXPOSE 8000
 
 ENTRYPOINT ["java"]
 CMD ["-jar", "app.jar"]
