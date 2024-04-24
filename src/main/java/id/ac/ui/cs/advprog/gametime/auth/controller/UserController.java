@@ -1,59 +1,29 @@
 package id.ac.ui.cs.advprog.gametime.auth.controller;
 
-import id.ac.ui.cs.advprog.gametime.auth.model.Enum.UserType;
-import id.ac.ui.cs.advprog.gametime.auth.model.UserEntity;
+import id.ac.ui.cs.advprog.gametime.auth.model.User;
 import id.ac.ui.cs.advprog.gametime.auth.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
-    // String createHTML = "userCreate";
-    // String listHTML = "userList";
+    private final UserService userService;
 
-    // @Autowired
-    // private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    // @GetMapping("/create")
-    // public String createUserPage(Model model){
-    //     UserEntity user = new UserEntity();
-    //     model.addAttribute("user", user);
-    //     model.addAttribute("types", UserType.getAll());
-    //     return createHTML;
-    // }
+    @GetMapping("/me")
+    public ResponseEntity<User> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    // @PostMapping("/create")
-    // public String createUserPost(@ModelAttribute("product") UserEntity user, Model model){
-    //     userService.create(user);
-    //     return "redirect:list";
-    // }
+        User currentUser = (User) authentication.getPrincipal();
 
-    // @GetMapping("/list")
-    // public String userListPage(Model model){
-    //     List<UserEntity> allUsers = userService.findAll();
-    //     model.addAttribute("users", allUsers);
-    //     return listHTML;
-    // }
-
-    // @GetMapping(value="/edit/{userId}")
-    // public String editProductPage(Model model, @PathVariable("userId") String username){
-    //     UserEntity user = userService.findByUsername(username);
-    //     if (user!=null){
-    //         model.addAttribute("user", user);
-    //         return "edituser";
-    //     }
-    //     return "redirect:../list";
-    // }
-
-    // @PostMapping("/edit")
-    // public String editProductPost(@ModelAttribute("user") UserEntity user, Model model){
-    //     System.out.println(user.getUsername());
-    //     userService.update(user.getUsername(), user);
-    //     return "redirect:list";
-    // }
+        return ResponseEntity.ok(currentUser);
+    }
 }
