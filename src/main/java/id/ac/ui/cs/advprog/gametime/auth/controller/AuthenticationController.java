@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @RequestMapping("/auth")
 @RestController
@@ -24,15 +28,18 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @Autowired
+    private Executor asyncTaskExecutor;
+
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    public CompletableFuture<ResponseEntity<User>>register(@RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
 
-        return ResponseEntity.ok(registeredUser);
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(registeredUser), asyncTaskExecutor);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> authenticate(@RequestBody LoginUserDto loginUserDto) {
+    public CompletableFuture<ResponseEntity<LoginResponseDto>> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser, authenticatedUser.getRole());
@@ -41,6 +48,6 @@ public class AuthenticationController {
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
-        return ResponseEntity.ok(loginResponse);
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(loginResponse), asyncTaskExecutor);
     }
 }
