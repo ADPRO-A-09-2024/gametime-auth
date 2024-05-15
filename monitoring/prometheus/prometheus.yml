@@ -1,8 +1,8 @@
 scrape_configs:
-  - job_name: 'transactionMetrics'
+  - job_name: 'authenticationMetrics'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 3s
     static_configs:
       - targets: ['host.docker.internal:8080']
         labels:
-          application: 'TransactionApplication'
+          application: 'AuthenticationApplication'
