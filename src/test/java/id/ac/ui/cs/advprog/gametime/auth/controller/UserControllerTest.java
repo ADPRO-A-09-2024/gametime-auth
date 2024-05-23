@@ -9,15 +9,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class UserControllerTest {
@@ -46,31 +44,35 @@ public class UserControllerTest {
 
 
     @Test
-    public void testGetProfile() {
+    public void testGetUserByEmail() {
         User user = new User();
         user.setEmail("test@example.com");
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(user));
+        when(userService.getUserByEmail("test@example.com")).thenReturn(user);
 
-        ResponseEntity<User> result = userController.getProfile("test@example.com");
+        ResponseEntity<User> result = userController.getUserByEmail("test@example.com");
 
         assertEquals("test@example.com", result.getBody().getEmail());
     }
 
     @Test
-    public void testGetProfileNotFound() {
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.empty());
+    public void testUpdateUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        when(userService.updateUserEmail("test@example.com", user)).thenReturn(user);
 
-        assertThrows(RuntimeException.class, () -> userController.getProfile("test@example.com"));
+        ResponseEntity<User> result = userController.updateUser("test@example.com", user);
+
+        assertEquals("test@example.com", result.getBody().getEmail());
     }
 
     @Test
-    public void testEditProfile() {
+    public void testDeleteUser() {
         User user = new User();
         user.setEmail("test@example.com");
-        when(userService.updateUser(any(User.class))).thenReturn(user);
+        when(userService.getUserByEmail("test@example.com")).thenReturn(user);
 
-        ResponseEntity<User> result = userController.editProfile(user);
+        ResponseEntity<Void> result = userController.deleteUser("test@example.com");
 
-        assertEquals("test@example.com", result.getBody().getEmail());
+        assertEquals(204, result.getStatusCodeValue());
     }
 }

@@ -24,11 +24,31 @@ public class UserService {
         return users;
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    public User updateUserEmail(String newEmail, User user) {
+        if (userRepository.existsByEmail(newEmail)) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        Optional<User> existingUser = userRepository.findById(user.getId());
+
+        if (existingUser.isPresent()) {
+            User userToUpdate = existingUser.get();
+            userToUpdate.setEmail(newEmail);
+            return userRepository.save(userToUpdate);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public void deleteUser(User user) {
+        if (userRepository.existsById(user.getId())) {
+            userRepository.delete(user);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 }

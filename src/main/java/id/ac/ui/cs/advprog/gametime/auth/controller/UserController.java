@@ -32,18 +32,31 @@ public class UserController {
         return CompletableFuture.supplyAsync(() ->ResponseEntity.ok(currentUser), asyncTaskExecutor);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<User> getProfile(@RequestParam String email) {
-        User user = userService.getUserByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    @GetMapping("/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/profile")
-    public ResponseEntity<User> editProfile(@RequestBody User updatedUser) {
-        User user = userService.updateUser(updatedUser);
+    @PutMapping("/{email}")
+    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User updatedUser) {
+        if (!email.equals(updatedUser.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User user = userService.updateUserEmail(email, updatedUser);
         return ResponseEntity.ok(user);
     }
 
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
 
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userService.deleteUser(user);
+        return ResponseEntity.noContent().build();
+    }
 }
