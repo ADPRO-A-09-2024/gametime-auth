@@ -10,14 +10,25 @@ https://auth-p5zxnxph7q-ew.a.run.app/
 4. Robert Benyamin - 2206817383
 5. Nadya Hoesin - 2106651673
 
-Context Diagram
+### 1. Context Diagram
 ![alt text](images/software_architecture-Context.jpg)
 
-Container Diagram
+### 2. Container Diagram
 ![alt text](images/software_architecture-Container.jpg)
 
-Deployment Diagram
+### 3. Deployment Diagram
 ![alt text](images/software_architecture-Deployment.jpg)
+
+## Improvement Future Architecture
+### 1. Future Architecture Context Diagram
+![alt text](images/software_architecture-Context(Improvement).jpg)
+
+### 2. Future Architecture Container Diagram
+![alt text](images/software_architecture-Container(Improvement).jpg)
+
+### 3. Future Architecture Deployment Diagram
+![alt text](images/software_architecture-Deployment(Improvement).jpg)
+
 
 Component Diagram Henry - Authentication
 ![alt text](images/software_architecture-Component(Henry).jpg)
