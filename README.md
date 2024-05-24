@@ -15,3 +15,6 @@ Context Diagram
 
 Container Diagram
 ![alt text](images/software_architecture-Container.jpg)
+
+Deployment Diagram
+![alt text](images/software_architecture-Deployment.jpg)
