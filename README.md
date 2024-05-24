@@ -18,3 +18,9 @@ Container Diagram
 
 Deployment Diagram
 ![alt text](images/software_architecture-Deployment.jpg)
+
+Component Diagram Henry - Authentication
+![alt text](images/software_architecture-Component(Henry).jpg)
+
+Code Diagram Henry - Authentication
+![alt text](images/auth.png)
