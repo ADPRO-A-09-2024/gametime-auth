@@ -9,3 +9,9 @@ https://auth-p5zxnxph7q-ew.a.run.app/
 3. Kevin Ignatius Wijaya - 2206083470
 4. Robert Benyamin - 2206817383
 5. Nadya Hoesin - 2106651673
+
+Context Diagram
+![alt text](images/software_architecture-Context.jpg)
+
+Container Diagram
+![alt text](images/software_architecture-Container.jpg)
