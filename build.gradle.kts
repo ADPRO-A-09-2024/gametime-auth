@@ -8,7 +8,7 @@ plugins {
 
 sonar {
     properties {
-        property("sonar.projectKey", "ADPRO-A-09-2024_gametime-transaction")
+        property("sonar.projectKey", "ADPRO-A-09-2024_gametime-auth")
         property("sonar.organization", "adpro-a-09-2024")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.exclusions", "**/configs")
