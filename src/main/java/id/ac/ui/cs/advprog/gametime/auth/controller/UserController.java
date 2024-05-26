@@ -5,9 +5,7 @@ import id.ac.ui.cs.advprog.gametime.auth.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.CompletableFuture;
@@ -32,5 +30,33 @@ public class UserController {
         User currentUser = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(currentUser);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{email}")
+    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User updatedUser) {
+        if (!email.equals(updatedUser.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User user = userService.updateUserEmail(email, updatedUser);
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userService.deleteUser(user);
+        return ResponseEntity.noContent().build();
     }
 }
