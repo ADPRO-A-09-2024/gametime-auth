@@ -83,6 +83,13 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+     {
+    }
+
+    public void setId(Integer i) {
+        this.id = i;
+    }
 }
 
 
