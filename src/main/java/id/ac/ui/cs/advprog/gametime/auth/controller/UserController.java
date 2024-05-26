@@ -26,11 +26,11 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public CompletableFuture<ResponseEntity<User>> authenticatedUser() {
+    public ResponseEntity<User> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
 
-        return CompletableFuture.supplyAsync(() ->ResponseEntity.ok(currentUser), asyncTaskExecutor);
+        return ResponseEntity.ok(currentUser);
     }
 }
