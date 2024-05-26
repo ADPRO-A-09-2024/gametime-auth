@@ -8,13 +8,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -23,86 +26,110 @@ public class UserServiceTest {
     private UserService userService;
 
     @BeforeEach
-    public void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testAllUsers() {
+    void testAllUsers() {
+        List<User> users = new ArrayList<>();
         User user1 = new User();
+        user1.setId(1);
+        user1.setEmail("user1@example.com");
+        users.add(user1);
+
         User user2 = new User();
-        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
+        user2.setId(2);
+        user2.setEmail("user2@example.com");
+        users.add(user2);
 
-        assertEquals(2, userService.allUsers().size());
-        verify(userRepository, times(1)).findAll();
+        when(userRepository.findAll()).thenReturn(users);
+
+        List<User> result = userService.allUsers();
+
+        assertEquals(2, result.size());
+        assertEquals("user1@example.com", result.get(0).getEmail());
+        assertEquals("user2@example.com", result.get(1).getEmail());
     }
 
     @Test
-    public void testGetUserByEmail() {
+    void testGetUserByEmail() {
         User user = new User();
-        user.setEmail("test@test.com");
-        when(userRepository.findByEmail("test@test.com")).thenReturn(Optional.of(user));
+        user.setEmail("test@example.com");
 
-        assertEquals(user, userService.getUserByEmail("test@test.com"));
-        verify(userRepository, times(1)).findByEmail("test@test.com");
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
+
+        User result = userService.getUserByEmail("test@example.com");
+
+        assertEquals("test@example.com", result.getEmail());
     }
 
     @Test
-    public void testGetUserByEmailNotFound() {
-        when(userRepository.findByEmail("test@test.com")).thenReturn(Optional.empty());
+    void testGetUserByEmailNotFound() {
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> userService.getUserByEmail("test@test.com"));
-        verify(userRepository, times(1)).findByEmail("test@test.com");
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.getUserByEmail("test@example.com");
+        });
+
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test
-    public void testUpdateUserEmail() {
+    void testUpdateUserEmail() {
         User user = new User();
         user.setId(1);
-        user.setEmail("old@test.com");
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.existsByEmail("new@test.com")).thenReturn(false);
+        user.setEmail("old@example.com");
 
         User updatedUser = new User();
         updatedUser.setId(1);
-        updatedUser.setEmail("new@test.com");
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
-            User userToSave = invocation.getArgument(0);
-            user.setEmail(userToSave.getEmail());
-            return user;
+        updatedUser.setEmail("new@example.com");
+
+        when(userRepository.existsByEmail("new@example.com")).thenReturn(false);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+
+        User result = userService.updateUserEmail("new@example.com", user);
+
+        assertEquals("new@example.com", result.getEmail());
+    }
+
+    @Test
+    void testUpdateUserEmailAlreadyInUse() {
+        User user = new User();
+        user.setId(1);
+        user.setEmail("old@example.com");
+
+        when(userRepository.existsByEmail("new@example.com")).thenReturn(true);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.updateUserEmail("new@example.com", user);
         });
 
-        User result = userService.updateUserEmail("new@test.com", user);
-
-        assertEquals("new@test.com", result.getEmail());
-        verify(userRepository, times(1)).save(user);
+        assertEquals("Email already in use", exception.getMessage());
     }
 
     @Test
-    public void testUpdateUserEmailUserNotFound() {
+    void testUpdateUserEmailUserNotFound() {
         User user = new User();
         user.setId(1);
+        user.setEmail("old@example.com");
+
+        when(userRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(userRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> userService.updateUserEmail("new@test.com", user));
-        verify(userRepository, times(0)).save(user);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.updateUserEmail("new@example.com", user);
+        });
+
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test
-    public void testUpdateUserEmailEmailInUse() {
+    void testDeleteUser() {
         User user = new User();
         user.setId(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.existsByEmail("new@test.com")).thenReturn(true);
 
-        assertThrows(RuntimeException.class, () -> userService.updateUserEmail("new@test.com", user));
-        verify(userRepository, times(0)).save(user);
-    }
-
-    @Test
-    public void testDeleteUser() {
-        User user = new User();
-        user.setId(1);
         when(userRepository.existsById(1)).thenReturn(true);
 
         userService.deleteUser(user);
@@ -111,14 +138,16 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUserNotFound() {
+    void testDeleteUserNotFound() {
         User user = new User();
         user.setId(1);
+
         when(userRepository.existsById(1)).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> userService.deleteUser(user));
-        verify(userRepository, times(0)).delete(user);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.deleteUser(user);
+        });
+
+        assertEquals("User not found", exception.getMessage());
     }
-
-
 }

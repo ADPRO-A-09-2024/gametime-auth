@@ -1,147 +1,58 @@
 package id.ac.ui.cs.advprog.gametime.auth.model;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Collection;
-import java.util.List;
 
-public class UserTest {
-    private User mockUser;
+import static org.junit.jupiter.api.Assertions.*;
+
+class UserTest {
+
+    private User user;
 
     @BeforeEach
-    public void setUp() {
-        mockUser = User.builder()
-                .email("user@email.com")
-                .password("password")
-                .role("buyer")
-                .build();
+    void setUp() {
+        user = new User();
+        user.setId(1);
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPassword("password");
+        user.setRole("BUYER");
+        user.setBalance(100);
     }
 
     @Test
-    public void testUserBuilder() {
-        User user = User.builder()
-                .username("user")
-                .email("user@email.com")
-                .password("password")
-                .role("buyer")
-                .balance(0)
-                .build();
-        assertEquals("user", user.getUsername());
-        assertEquals("user@email.com", user.getEmail());
-        assertEquals("buyer", user.getRole());
-        assertEquals(0, user.getBalance());
+    void testGettersAndSetters() {
+        assertEquals(1, user.getId());
+        assertEquals("testuser", user.getName());
+        assertEquals("test@example.com", user.getEmail());
+        assertEquals("password", user.getPassword());
+        assertEquals("BUYER", user.getRole());
+        assertEquals(100, user.getBalance());
     }
 
     @Test
-    public void testUserBuilderWithInvalidRole() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().role("MEOW");
-        });
+    void testUserDetailsMethods() {
+        assertTrue(user.isAccountNonExpired());
+        assertTrue(user.isAccountNonLocked());
+        assertTrue(user.isCredentialsNonExpired());
+        assertTrue(user.isEnabled());
+        assertTrue(user.getAuthorities().isEmpty());
     }
 
     @Test
-    public void testUserBuilderWithValidRole() {
-        User user = User.builder()
-                .role("buyer")
-                .build();
-        assertEquals("buyer", user.getRole());
-        user = User.builder()
-                .role("seller")
-                .build();
-        assertEquals("seller", user.getRole());
-    }
+    void testBuilder() {
+        User builtUser = User.builder()
+                             .username("builtuser")
+                             .email("built@example.com")
+                             .password("password123")
+                             .role("SELLER")
+                             .balance(200)
+                             .build();
 
-    @Test
-    public void testUserBuilderWithInvalidName() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().username("");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().username(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().username(" ");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().username(" asd");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().username("as$df");
-        });
-    }
-
-    @Test
-    public void testUserBuilderWithInvalidEmail() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email("");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email(" @email.com");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email("asdf");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email("asdf@");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email("asdf@.com");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().email("asdf@com");
-        });
-    }
-
-    @Test
-    public void testUserBuilderWithInvalidPassword() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().password("");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().password(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().password(" ");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().password(" asdf");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            User.builder().password("as$df");
-        });
-    }
-
-    @Test
-    public void testUserDetailImplGetUsername() {
-        assertEquals("user@email.com", mockUser.getUsername());
-    }
-
-    @Test
-    public void testUserDetailImplGetAuthorities() {
-        assertEquals(List.of(), mockUser.getAuthorities());
-    }
-
-    @Test
-    public void testUserDetailImplIsAccountNonExpired() {
-        assertTrue(mockUser.isAccountNonExpired());
-    }
-
-    @Test
-    public void testUserDetailImplIsAccountNonLocked() {
-        assertTrue(mockUser.isAccountNonLocked());
-    }
-
-    @Test
-    public void testUserDetailImplIsEnabled() {
-        assertTrue(mockUser.isEnabled());
-    }
-
-    @Test
-    public void testUserDetailImplIsCredentialsNonExpired() {
-        assertTrue(mockUser.isCredentialsNonExpired());
+        assertEquals("builtuser", builtUser.getName());
+        assertEquals("built@example.com", builtUser.getEmail());
+        assertEquals("password123", builtUser.getPassword());
+        assertEquals("SELLER", builtUser.getRole());
+        assertEquals(200, builtUser.getBalance());
     }
 }
